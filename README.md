@@ -27,7 +27,7 @@
 ## 1. Get started with git
 Any project exists in 4 spaces:
 - The working tree
-- The stageing area
+- The staging area
 - The local repository
 - The remote repository
 Very simply put, in different areas you can do different things. Section 4 covers the remote repository, the rest you find here.
@@ -81,7 +81,7 @@ git rm --cached filename
 
 ### 1.5 Local repository
 A repository is a project that Git is tracking, including its full history of changes. What is the local history of my project?
-When we want to save the changes in the stageing area to history, we use:
+When we want to save the changes in the staging area to history, we use:
 ```shell
 git commit -m "Put the text for your commit here"
 ```
@@ -152,7 +152,7 @@ For example:
 !*.md
 !*.sh
 ```
-Now when I choose to add everything to the stageing area, it will ignore everything but what I have specified.
+Now when I choose to add everything to the staging area, it will ignore everything but what I have specified.
 
 Should you have committed something that should not have been tracked, like super secret stuff, you will have to reset history.
 
