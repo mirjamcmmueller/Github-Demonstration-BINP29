@@ -17,7 +17,7 @@
 - [4. Getting started with Github: Remote Repositories](4-getting-started-with-github-remote-repositories)
   - [4.1 Connecting github to git via SSH key](41-connecting-github-to-git-via-ssh-key)
   - [4.2 Connecting to the DeMON page](41-connecting-to-the-demon-page)
--[5. Two remote, one local](5-two-remote-one-local)
+- [5. Two remote, one local](5-two-remote-one-local)
   - [5.1 Everything goes to both remote repos](51-everything-goes-to-both-remote-repos)
   - [5.2 Different content on different remote repos](52-different-content-on-different-remote-repos)
 - [6. Collaboration on Github](6-collaboration-on-github)
@@ -87,8 +87,9 @@ git commit -m "Put the text for your commit here"
 ```
 Imagine a commit a bit like a snapshot of a project at a specific point in time. If you do not specify the -m and a text, git will ask you for one in command line before allowing you to move on.
 
-If you, hypothetically, just comitted a file you did not want to commit (but not like state secrets or anything), you can use git revert.
-To do this you need to first get the ID of the last commit
+If you, hypothetically, just comitted a file you did not want to commit (but not like state secrets or anything), you can use either again git rm --cached to untrack the file in the filetree, or if you want to remove it completely, use git revert.
+
+To do this you need to first get the ID of the last commit.
 ```shell
 git log
 ```
@@ -98,7 +99,7 @@ Then use the number to revert the last commit. We use a dummy ID a1b2c3d here.
 ```shell
 git revert -n a1b2c3d
 ```
-With git status you can now see that all files are back in stageing area. Note that this does not rewrite history, it just savely undoes the last commit with a new one.
+With git status you can now see that all files are returned to their previous status in the staging area. Note that this does not rewrite history, it just savely undoes the last commit with a new one. 
 If you committed something you need to have removed from history, check section 2.
 
 If you want to use git log to look at past commits and past versions of your files, you can inspect them using the commit ID. If you have a lot of commits, the --oneline flag helps you have a more compact clear version.
@@ -152,6 +153,24 @@ For example:
 !*.sh
 ```
 Now when I choose to add everything to the stageing area, it will ignore everything but what I have specified.
+
+Should you have committed something that should not have been tracked, like super secret stuff, you will have to reset history.
+
+```shell
+#if not pushed yet.
+git reset --soft HEAD~1
+```
+Unlike revert, this DOES change history. Only use it when you absolutely have to. 
+
+If you have already pushed it to github, immediately inform everyone that is concerned. I.e. owners of the data, administration of the server to which you just pushed the login etc. Then change what you can and remove it from your github immediately. 
+```shell
+git filter-branch --force --index-filter \
+"git rm --cached --ignore-unmatch secret-file.txt" \
+--prune-empty --tag-name-filter cat -- --all
+#Force push to remote
+git push origin --force --all
+```
+This is an absolute last resort (and I have to be honest, I have not tested it but have it from back when I learned github as a master student), but it essentially cuts the last commit from whatever branch you are on at the moment and force pushes the change to remote.
 
 By default git does not track empty directories. Should you want an empty directory to be part of your repo (local or remote), you can achieve that by going into the empty directory and adding a .gitkeep file. It is enough to touch it, no need to put anything in it. See an example below of how this looks in the terminal, to make sense of it:
 
